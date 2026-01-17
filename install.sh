@@ -5,6 +5,12 @@ set -e
 
 DOTFILES_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+    echo "❌ Error: This setup is currently optimized for Linux (Ubuntu/Debian) only."
+    echo "Detected OSTYPE: $OSTYPE"
+    exit 1
+fi
+
 # --- TOOL FUNCTIONS ---
 setup_alacritty() {
     echo "🖥️  Setting up Alacritty..."
@@ -59,7 +65,7 @@ setup_tmux() {
 setup_neovim() {
     echo "🌙 Setting up Neovim..."
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if ! command -v nvim &> /dev/null; then
+        if ! command -v nvim &>/dev/null; then
             sudo snap install nvim --classic
         fi
     fi
@@ -67,14 +73,13 @@ setup_neovim() {
     stow nvim
 }
 
-
 # --- MAIN EXECUTION ---
 
 echo "🚀 Starting Dotfiles Bootstrap..."
 
 # 1. Essential System Tools
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    sudo apt update && sudo apt install -y stow curl git
+    sudo apt update && sudo apt install -y stow curl git shfmt
 fi
 
 # 2. Execute Tool Setups
@@ -85,4 +90,3 @@ setup_tmux
 setup_neovim
 
 echo "✅ Setup Complete!"
-
