@@ -51,44 +51,42 @@ bindkey '^H' backward-kill-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
 
-# VI MODE
-bindkey -v
-
-# Change cursor shape based on mode
-function zle-keymap-select() {
-  if [[ ${KEYMAP} == vicmd ]]; then
-    echo -ne '\e[2 q' # Block for Normal Mode
-  else
-    echo -ne '\e[6 q' # Bar for Insert Mode
-  fi
-}
-zle -N zle-keymap-select
-
-# Ensure the bar cursor is set when starting the shell
-precmd() { echo -ne '\e[6 q' }
-
-# --- CLIPBOARD SYNC FOR VI MODE ---
-# Detect the clipboard tool (wl-copy for Wayland, xclip for X11)
-if command -v wl-copy &>/dev/null; then
-  CLIP_TOOL="wl-copy"
-elif command -v xclip &>/dev/null; then
-  CLIP_TOOL="xclip -selection clipboard"
-else
-  CLIP_TOOL=""
-fi
-
-# Function to yank Zsh buffer to system clipboard
-function vi-yank-system() {
-  zle vi-yank
-  if [ -n "$CLIP_TOOL" ]; then
-    echo -n "$CUTBUFFER" | eval "$CLIP_TOOL"
-  fi
-}
-
-# Register the widget and bind it to 'y' in command mode
-zle -N vi-yank-system
-bindkey -M vicmd 'y' vi-yank-system
-bindkey -M viins '^R' history-incremental-search-backward
-bindkey -M vicmd '^R' history-incremental-search-backward
-
-
+# # VI MODE
+# bindkey -v
+#
+# # Change cursor shape based on mode
+# function zle-keymap-select() {
+#   if [[ ${KEYMAP} == vicmd ]]; then
+#     echo -ne '\e[2 q' # Block for Normal Mode
+#   else
+#     echo -ne '\e[6 q' # Bar for Insert Mode
+#   fi
+# }
+# zle -N zle-keymap-select
+#
+# # Ensure the bar cursor is set when starting the shell
+# precmd() { echo -ne '\e[6 q' }
+#
+# # --- CLIPBOARD SYNC FOR VI MODE ---
+# # Detect the clipboard tool (wl-copy for Wayland, xclip for X11)
+# if command -v wl-copy &>/dev/null; then
+#   CLIP_TOOL="wl-copy"
+# elif command -v xclip &>/dev/null; then
+#   CLIP_TOOL="xclip -selection clipboard"
+# else
+#   CLIP_TOOL=""
+# fi
+#
+# # Function to yank Zsh buffer to system clipboard
+# function vi-yank-system() {
+#   zle vi-yank
+#   if [ -n "$CLIP_TOOL" ]; then
+#     echo -n "$CUTBUFFER" | eval "$CLIP_TOOL"
+#   fi
+# }
+#
+# # Register the widget and bind it to 'y' in command mode
+# zle -N vi-yank-system
+# bindkey -M vicmd 'y' vi-yank-system
+# bindkey -M viins '^R' history-incremental-search-backward
+# bindkey -M vicmd '^R' history-incremental-search-backward
