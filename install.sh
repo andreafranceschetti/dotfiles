@@ -24,7 +24,7 @@ setup_alacritty() {
 setup_zsh() {
     echo "🐚 Setting up Zsh & Catppuccin theme..."
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        sudo apt install -y zsh zsh-syntax-highlighting zsh-autosuggestions
+        sudo apt install -y zsh zsh-syntax-highlighting zsh-autosuggestions shfmt
     fi
 
     # Clean and stow
@@ -79,7 +79,17 @@ echo "🚀 Starting Dotfiles Bootstrap..."
 
 # 1. Essential System Tools
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    sudo apt update && sudo apt install -y stow curl git shfmt
+    sudo apt update && sudo apt install -y stow curl git
+
+    # for zsh vi mode system clipboard support
+    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+        sudo apt install -y wl-clip # wayland
+    elif [ "$XDG_SESSION_TYPE" = "x11" ]; then
+        sudo apt install -y xclip # x11
+    else
+        echo "No graphical session detected??"
+        exit 1
+    fi
 fi
 
 # 2. Execute Tool Setups
