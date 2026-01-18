@@ -15,6 +15,7 @@ setopt PROMPT_SUBST
 # --- 3. PROMPT STYLING (Macchiato) ---
 # Colors
 CLR_BLUE="%F{blue}"
+CLR_WHITE="%F{white}"
 CLR_GREEN="%F{green}"
 CLR_GIT="%F{red}"
 CLR_HOST="%F{cyan}"
@@ -32,7 +33,7 @@ function git_info() {
 
 # Prompt: [user] at [host] in [CWD] [git]
 # %~ shows the CWD relative to home
-PROMPT="${CLR_BLUE}%n${CLR_HOST}@%m ${CLR_GREEN}%B%~%b${CLR_RESET}"
+PROMPT="${CLR_BLUE}%n${CLR_WHITE}@${CLR_HOST}%m ${CLR_GREEN}%B%~%b${CLR_RESET}"
 PROMPT+='$(git_info)'
 PROMPT+="${CLR_PURPLE} ❯ ${CLR_RESET}"
 
