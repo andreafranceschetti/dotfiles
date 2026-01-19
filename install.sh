@@ -35,7 +35,7 @@ setup_zsh() {
 
     # Theme logic
     if [ ! -d "/tmp/catppuccin-zsh" ]; then
-        git clone --depth 1 https://github.com /tmp/catppuccin-zsh
+        git clone --depth 1 https://github.com/catppuccin/zsh-syntax-highlighting.git /tmp/catppuccin-zsh
     fi
     cp /tmp/catppuccin-zsh/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh "$HOME/.zsh/"
 
@@ -44,6 +44,34 @@ setup_zsh() {
         echo "Changing default shell to Zsh..."
         chsh -s "$(which zsh)"
     fi
+}
+
+setup_font() {
+
+    FONT_NAME="JetBrainsMono"
+    NERD_FONT_NAME="JetBrainsMono"
+    FONTS_DIR="$HOME/.local/share/fonts"
+
+    echo "Creating font directory at $FONTS_DIR..."
+    mkdir -p "$FONTS_DIR"
+
+    echo "Downloading $FONT_NAME Nerd Font from official Nerd Fonts release..."
+    wget -q --show-progress \
+        "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${NERD_FONT_NAME}.zip" \
+        -O "${FONT_NAME}.zip"
+
+    echo "Extracting and installing..."
+    unzip -o "${FONT_NAME}.zip" -d "$FONTS_DIR/${FONT_NAME}"
+
+    echo "Cleaning up..."
+    rm -f "${FONT_NAME}.zip"
+
+    echo "Updating font cache..."
+    fc-cache -fv "$FONTS_DIR"
+
+    echo "---------------------------------------------------"
+    echo "Done! Set your terminal font to 'JetBrainsMono Nerd Font'."
+    echo "---------------------------------------------------"
 }
 
 setup_tmux() {
@@ -57,7 +85,7 @@ setup_tmux() {
 
     TPM_DIR="$HOME/.config/tmux/plugins/tpm"
     if [ ! -d "$TPM_DIR" ]; then
-        git clone https://github.com "$TPM_DIR"
+        git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
         "$TPM_DIR/bin/install_plugins"
     fi
 }
@@ -80,22 +108,13 @@ echo "🚀 Starting Dotfiles Bootstrap..."
 # 1. Essential System Tools
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     sudo apt update && sudo apt install -y stow curl git
-
-    # for zsh vi mode system clipboard support
-    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-        sudo apt install -y wl-clip # wayland
-    elif [ "$XDG_SESSION_TYPE" = "x11" ]; then
-        sudo apt install -y xclip # x11
-    else
-        echo "No graphical session detected??"
-        exit 1
-    fi
 fi
 
 # 2. Execute Tool Setups
 cd "$DOTFILES_DIR"
 setup_alacritty
 setup_zsh
+setup_font
 setup_tmux
 setup_neovim
 

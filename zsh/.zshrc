@@ -26,7 +26,7 @@ CLR_RESET="%f"
 function git_info() {
   local branch=$(git branch --show-current 2>/dev/null)
   if [ -n "$branch" ]; then
-    echo " ${CLR_GIT} $branch${CLR_RESET}"
+    echo " ${CLR_GIT}\ue725 $branch${CLR_RESET}"
   fi
 }
 
