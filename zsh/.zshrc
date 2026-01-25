@@ -46,12 +46,12 @@ function container_info() {
 
   # Generic docker detection
   if [[ -f /.dockerenv ]] || grep -qE '(docker|containerd|kubepods)' /proc/1/cgroup 2>/dev/null; then
-    echo "${CLR_PURPLE}%{\uf308%}%{${CLR_RESET}%}"
+    echo "${CLR_PURPLE}%{\uf308%}%{${CLR_RESET}%} "
   fi
 }
 
 PROMPT='$(container_info)'
-PROMPT+=" %{${CLR_BLUE}%}%n%{${CLR_WHITE}%}@%{${CLR_HOST}%}%m"
+PROMPT+="%{${CLR_BLUE}%}%n%{${CLR_WHITE}%}@%{${CLR_HOST}%}%m"
 PROMPT+=" %{${CLR_GREEN}%}%B%~%b%{${CLR_RESET}%}"
 PROMPT+='$(git_info)'
 PROMPT+="%{${CLR_PURPLE}%} ❯ %{${CLR_RESET}%}"
