@@ -31,34 +31,27 @@ CLR_WHITE="%F{white}"
 CLR_GREEN="%F{green}"
 CLR_GIT="%F{red}"
 CLR_HOST="%F{cyan}"
-CLR_PURPLE="%F{magenta}"
+CLR_PURPLE="%F{purple}"
 CLR_RESET="%f"
 
 # Git branch info
 function git_info() {
   local branch=$(git branch --show-current 2>/dev/null)
   if [ -n "$branch" ]; then
-    echo " ${CLR_GIT}%{\ue725%} $branch${CLR_RESET}"
+    echo " ${CLR_GIT}%{\ue725%}$branch${CLR_RESET}"
   fi
 }
 
 function container_info() {
-  # Strong signal: your dev workflow flag
-  if [[ "${DEV_CONTAINER_ACTIVE:-0}" == "1" ]]; then
-#    echo " ${CLR_PURPLE} ${CLR_RESET}"
-    echo " ${CLR_PURPLE}%{\uf308%}%{${CLR_RESET}%}"
-    return
-  fi
 
   # Generic docker detection
   if [[ -f /.dockerenv ]] || grep -qE '(docker|containerd|kubepods)' /proc/1/cgroup 2>/dev/null; then
-    #echo " ${CLR_PURPLE}[ctr]${CLR_RESET}"
-    echo " ${CLR_PURPLE}%{\uf308%}%{${CLR_RESET}%}"
+    echo "${CLR_PURPLE}%{\uf308%}%{${CLR_RESET}%}"
   fi
 }
 
-PROMPT="%{${CLR_BLUE}%}%n%{${CLR_WHITE}%}@%{${CLR_HOST}%}%m"
-PROMPT+='$(container_info)'
+PROMPT='$(container_info)'
+PROMPT+=" %{${CLR_BLUE}%}%n%{${CLR_WHITE}%}@%{${CLR_HOST}%}%m"
 PROMPT+=" %{${CLR_GREEN}%}%B%~%b%{${CLR_RESET}%}"
 PROMPT+='$(git_info)'
 PROMPT+="%{${CLR_PURPLE}%} ❯ %{${CLR_RESET}%}"
